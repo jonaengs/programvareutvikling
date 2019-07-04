@@ -1,0 +1,21 @@
+{% extends 'itsBooking/base.html' %}
+{% load helpers %}
+
+
+{% block body %}
+<div class="uk-container uk-container-small">
+    {% include 'generic/display_messages.html' %}
+
+    <div class="uk-margin">
+    {% if user|in_group:"students" %}
+        {% include 'booking/../landing/course_list.html' with courses=user.enrolled_courses.all %}
+    {% elif user|in_group:"assistants" %}
+        {% include 'booking/../landing/course_list.html' with courses=user.assisting_courses.all %}
+    {% elif user|in_group:"course_coordinators" %}
+        <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-grid-match uk-text-center" uk-grid>
+            {% include 'booking/course_grid_box.html' with course=user.supervising_course %}
+        </div>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

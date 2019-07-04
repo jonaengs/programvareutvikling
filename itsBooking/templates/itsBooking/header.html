@@ -1,0 +1,31 @@
+{% load static %}
+{% load helpers %}
+
+<nav class="uk-navbar-container uk-margin">
+    <div class="uk-container uk-container-medium">
+        <div class="uk-navbar">
+            <div class="uk-navbar-left">
+                <div class="uk-navbar-item">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static "itsbooking.png" %}" width="150px" />
+                    </a>
+                </div>
+                <ul class="uk-navbar-nav">
+                    {% if user|in_group:"students" %}
+                    <li><a href="{% url 'student_reservation_list' %}">Mine reservasjoner</a></li>
+                        {% elif user|in_group:"assistants" %}
+                        <li><a href="{% url 'assistant_reservation_list' %}">Mine saltimer</a></li>
+                    {% endif %}
+                    {% if request.user.is_superuser  %}
+                        <li><a href="{% url 'populate' %}">Populate DB</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="uk-navbar-right">
+                <ul class="uk-navbar-nav">
+                    <li><a href="{% url 'logout' %}">Logg ut</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

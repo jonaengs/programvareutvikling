@@ -1,0 +1,37 @@
+{% extends 'itsBooking/base.html' %}
+{% load helpers %}
+
+{% block body %}
+
+    <div class="uk-container uk-container-medium">
+
+        <h2>{{ course.course_code }} - {{ course.title }}</h2>
+
+        {% include 'generic/display_messages.html' %}
+        {% include 'generic/display_form_errors.html' %}
+
+        {% if request.user|in_group:'students' %}
+            {% include 'booking/reservation_input.html' %}
+
+        {% elif request.user|in_group:'course_coordinators' %}
+            <ul class="uk-subnav uk-subnav-pill" uk-switcher>
+
+                <li><a href="#">Sett ant. studasser</a></li>
+                <li><a href="#">Oppmeldte studasser</a></li>
+                <li><a href="#">Oppmeldte studenter</a></li>
+            </ul>
+
+            <ul class="uk-switcher uk-margin">
+
+                <li>{% include 'booking/table/set_studentassistants.html' %}</li>
+                <li>{% include 'booking/table/cc_studass_overview.html' %}</li>
+                <li>{% include 'booking/table/cc_student_overview.html' %}</li>
+            </ul>
+
+        {% elif request.user|in_group:'assistants' %}
+            {% include 'booking/table/assistant.html' %}
+        {% endif %}
+        <br>
+    </div>
+
+{% endblock %}

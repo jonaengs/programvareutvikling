@@ -1,0 +1,50 @@
+{% load static %}
+
+<article class="uk-comment">
+    <header class="uk-comment-header uk-grid-medium uk-flex-middle" uk-grid>
+        <div class="uk-width-auto">
+            {% include 'generic/display_avatar_img.html' with user=announcement.author %}
+        </div>
+        <div class="uk-width-expand">
+            <h4 class="uk-comment-title uk-margin-remove">
+                <a href="{% url 'announcement_detail' slug=announcement.course.slug pk=announcement.pk %}" class="uk-link-text">
+                    {{ announcement.title }}
+                </a>
+            </h4>
+            {% url 'announcement_detail' slug=announcement.course.slug pk=announcement.pk as announcement_detail %}
+            {% if request.path == announcement_detail %}
+            <a href="{% url 'announcements' slug=announcement.course.slug %}" class="uk-align-right">Tilbake</a>
+            {% endif %}
+
+            <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove-top">
+                <li>
+                    <span uk-icon="icon: user"></span>
+                    {{ announcement.author.get_full_name }}</li>
+                <li>
+                    <span uk-icon="icon: calendar"></span>
+                    {{ announcement.timestamp }}
+                </li>
+                <li><a href="{% url 'announcement_detail' slug=announcement.course.slug pk=announcement.pk %}#comment-container">
+                    <span uk-icon="icon: comments"></span>
+                    {{ announcement.comments.count }} Kommentarer</a></li>
+                <li><a href="{% url 'announcement_detail' slug=announcement.course.slug pk=announcement.pk %}#comment-form">
+                    <span uk-icon="icon: reply"></span>
+                    Svar</a></li>
+                {% if request.user == announcement.author and show_delete %}
+                    <li>
+                        <button class="uk-button uk-button-small uk-button-default uk-margin-small-right"
+                                onclick="set_confirm_delete_modal_action(this)"
+                                type="button" uk-toggle="target: #modal-confirm-delete"
+                                id="{{ announcement.pk }}">
+                            Slett
+                        </button>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </header>
+    <div class="uk-comment-body">
+        <p>{{ announcement.content|linebreaks }}</p><br>
+    </div>
+</article>
+

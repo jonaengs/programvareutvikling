@@ -1,0 +1,14 @@
+<ul uk-accordion>
+    <li class="uk-closed">
+        <a class="uk-accordion-title" href="#">Nytt innlegg</a>
+        <div class="uk-accordion-content">
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class="uk-fieldset">
+                    {{ announcement_form }}
+                    <input type="submit" value="Send" class="uk-button uk-button-primary">
+                </fieldset>
+            </form>
+        </div>
+    </li>
+</ul>

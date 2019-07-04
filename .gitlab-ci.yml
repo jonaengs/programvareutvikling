@@ -1,0 +1,45 @@
+image: python:latest
+
+stages:
+  - test
+  - deploy
+
+before_script:
+  - pip install -r requirements.txt
+
+test:
+  stage: test
+  script:
+  - coverage run --source='.' manage.py test
+  - coverage html
+  - coverage report --skip-covered | grep TOTAL
+  coverage: '/\d+\%\s*$/'
+  artifacts:
+    paths:
+    - coverage_html_report/
+
+pages:
+  stage: deploy
+  dependencies:
+  - test
+  script:
+  - mv coverage_html_report/ public/
+  artifacts:
+    paths:
+    - public
+    expire_in: 30 days
+  only:
+  - master
+
+development:
+  stage: deploy
+  script:
+  - pip install eb
+  - mkdir ~/.aws/
+  - touch ~/.aws/config
+  - printf "[profile test]\naws_access_key_id = %s\naws_secret_access_key = %s\nregion=eu-north-1\noutput=json" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/config
+  - eb deploy itsbooking-production --profile test
+  only:
+  - cd
+  - master
+  when: manual

@@ -1,0 +1,43 @@
+{% extends 'booking/reservation_table.html' %}
+{% load helpers %}
+
+{% block table_content %}
+    <button class="uk-button-primary uk-width-small table_button" type="button"
+            id="{{ reservation.id }}-
+            {{ reservation.booking_interval.get_day_display|nob_day }}-
+            {{ reservation.start }}-
+            {{ reservation.end }}"
+            {% if reservation.booking_interval.max_available_assistants == 0 %}
+            disabled>Stengt
+            {% elif reservation|available_slots != 0 %}
+                uk-toggle="target: #reservation_modal" style="cursor: pointer;" onclick="fill_reservation_form(this)">
+                {{ reservation|available_slots }}/{{ reservation.booking_interval.assistants.count }} ledig
+            {% else %}
+                disabled>
+                0/{{ reservation.booking_interval.assistants.count }} ledig
+            {% endif %}
+    </button>
+
+    <div id="reservation_modal" uk-modal>
+        <div class="uk-modal-dialog">
+            <form id="reservation_form" method="post">
+                {{ form }}
+                {% csrf_token %}
+                <button class="uk-modal-close-default" type="button" uk-close></button>
+                <div class="uk-modal-header">
+                    <h2 class="uk-modal-title">Reserver</h2>
+                </div>
+                <div class="uk-modal-body uk-text-center">
+                    <p>Er du sikker på at vil reservere tid hos studass for intervallet:</p>
+                    <h5 id="modal_day"></h5>
+                    <h5 class="uk-margin-remove-top" id="modal_interval"></h5>
+                </div>
+                <div class="uk-modal-footer uk-text-right">
+                    <input class="uk-button uk-button-default uk-modal-close" type="reset" value="Avbryt">
+                    <input class="uk-button uk-button-primary" type="submit" value="Bekreft">
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+[run]
+omit =
+    # omit generated files, test files themselves
+    /venv/*
+    */migrations/*
+    */tests.py
+    */apps.py
+    */__init__.py
+    */manage.py
+    */aws_eb_settings.py
+
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+
+    # Don't complain about missing debug-only code:
+    def __str__
+
+omit =
+    # omit generated files, test files themselves
+    /venv/*
+    */migrations/*
+    */tests.py
+    */apps.py
+    */__init__.py
+    */manage.py
+
+[html]
+directory = coverage_html_report

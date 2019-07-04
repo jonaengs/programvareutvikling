@@ -1,0 +1,16 @@
+<div>
+    <p>Sal er åpen {{ total_opening_time }} timer i uken</p>
+    <div>
+        <p>{{ assistants_registered_for_bi|length }} / {{ course.assistants.all.count }}
+        studentassistenter har meldt seg opp</p>
+        <progress id="js-progressbar" class="uk-progress" value="{{ assistant_percent }}" max="100"></progress>
+    </div>
+    <div>
+        <p>{{ booked_ri_count }} / {{ available_rintervals_count }} av reservasjonsintervallene er reservert av studenter</p>
+        <progress id="js-progressbar" class="uk-progress" value="{{ student_percent }}" max="100"></progress>
+    </div>
+    <div>
+        <p>{{ full_bi_count }} / {{ available_bintervals_count }} av bookingintervallene har maks antall studentassistenter</p>
+        <progress id="js-progressbar" class="uk-progress" value="{{ max_studass_percent }}" max="100"></progress>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+{% load helpers %}
+
+<style>
+    button {
+        /* vertically align button with status badge */
+        position: relative;
+        right: 10px;
+    }
+    .radio-container {
+        margin-right: 10px;
+    }
+</style>
+
+<div class="uk-card uk-card-default uk-card-body uk-card-small" id="{{ exercise.id }}">
+    {% include 'assignments/card/exercise_status_badge.html' %}
+    <h3 class="uk-card-title">
+        {% if request.user|in_group:"assistants" or request.user|in_group:"course_coordinators" %}
+            {{ exercise.student|name }}
+        {% endif %}
+    </h3>
+    <p>
+        <a href="{{ exercise.file.url }}">{{ exercise.filename }}</a>
+        {% if request.user|in_group:"assistants" or request.user|in_group:"course_coordinators" %}
+            {% if exercise.approved is None %}
+                <button class="uk-button-primary uk-button uk-float-right" id="{{ exercise.pk }}-button"
+                        onclick="toggle_review_form(this)">
+                    Gi tilbakemelding
+                </button>
+            {% elif request.user == exercise.feedback_by or request.user|in_group:"course_coordinators" %}
+                <button class="uk-button-default uk-button uk-float-right" id="{{ exercise.pk }}-button"
+                        onclick="override_review(this)">
+                    Ny vurdering
+                </button>
+            {% endif %}
+        {% endif %}
+    </p>
+    {% if exercise.feedback_text %}
+        <p class="uk-text-emphasis"> </p>
+        <p>
+            <i>Kommentar:</i>
+            {{ exercise.feedback_text }}
+        </p>
+    {% endif %}
+    {% if exercise.feedback_by and not request.user|in_group:"students"%}
+        <p>
+            <i>ansvarlig: </i> {{ exercise.feedback_by|name }}
+        </p>
+    {% endif %}
+    {% include 'assignments/card/exercise_review_form.html' %}
+</div>
+
+<script>
+
+    const hide = 'Gjem skjema';
+    const show = 'Gi tilbakemelding'
+    const reassess = 'Ny vurdering';
+
+    function show_review_form(button, form) {
+        form.style.display = 'block';
+        button.innerText = hide;
+    }
+
+    function hide_review_form(button, form) {
+        form.style.display = 'none';
+        if (button.className.includes('default')) {
+            button.innerText = reassess;
+        } else {
+            button.innerText = show;
+        }
+    }
+
+    function toggle_review_form(button) {
+        let id_num = button.id.split('-')[0];
+        let form = document.getElementById(id_num + '-form');
+        if (form.style.display == 'none') {
+            show_review_form(button, form);
+        } else {
+            hide_review_form(button, form);
+        }
+    }
+
+    function override_review(button) {
+        if (button.innerText != hide.toUpperCase()) {
+            let confirmed = confirm("Dette vil slette den foreliggende vurderingen. " +
+                "Er du sikker på at du vil fortsette?");
+            if (confirmed) {
+                toggle_review_form(button);
+            }
+        } else {
+            toggle_review_form(button);
+        }
+    }
+
+</script>

@@ -1,0 +1,25 @@
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}itsBooking{% endblock %}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <meta property="og:title" content="{% block og_title %}itsBooking{% endblock og_title %}"/>
+    <meta property="og:site_name" content="itsBooking"/>
+    <meta property="og:description" content="{% block og_description %}{% endblock og_description %}"/>
+    <meta property="description" content="{% block description %}{% endblock description %}"/>
+    <meta property="og:locale" content="nb-NO" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'itsBooking/uikit/uikit.min.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'itsBooking/css/styling.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'itsBooking/uikit/uikit.min.js' %}"></script>
+    <script src="{% static 'itsBooking/uikit/uikit-icons.min.js' %}"></script>
+
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'itsBooking/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'itsBooking/favicon/favicon-16x16.png' %}">
+
+    {% block head %}{% endblock %}
+</head>

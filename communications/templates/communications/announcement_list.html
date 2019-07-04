@@ -1,0 +1,24 @@
+{% extends 'itsBooking/base.html' %}
+{% load static %}
+{% load helpers %}
+
+
+{% block body %}
+    <div class="uk-container uk-container-small">
+
+        <h2>Kunngjøringer - {{ course.title }}</h2>
+
+        {% if request.user|in_group:"course_coordinators" %}
+            {% include 'communications/announcement_form.html' %}
+        {% endif %}
+
+        {% for announcement in announcement_list %}
+            {% include 'communications/announcement_card.html' %}
+            <br>
+        {% empty %}
+            <p><i>Ingen kunngjøringer</i></p>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

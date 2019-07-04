@@ -1,0 +1,11 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+    {% include 'itsBooking/header_imports.html' %}
+    <body>
+        {% block header %}{% include 'itsBooking/header.html' %}{% endblock header %}
+        <div class="content">{% block body %}{% endblock body %}</div>
+        {% block footer %}{% include 'itsBooking/footer.html' %}{% endblock footer %}
+    </body>
+</html>

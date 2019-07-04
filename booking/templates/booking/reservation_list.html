@@ -1,0 +1,47 @@
+{% extends 'itsBooking/base.html' %}
+{% load helpers %}
+
+
+{% block body %}
+    <div class="uk-container uk-container-medium">
+        {% include 'generic/display_messages.html'%}
+        {% for day in days%}
+            <h3 class="uk-heading-bullet">{{ day|nob_day }}</h3>
+            <div class="uk-card uk-card-default uk-card-body">
+                <table class="uk-table uk-table-middle uk-table-divider">
+                    <thead>
+                        <tr>
+                            <th class="uk-width-small">Tid</th>
+                            <th class="uk-width-small">Emnekode</th>
+                            <th class="uk-width-medium">Emne</th>
+                            <th class="uk-width-medium">Studentassistent</th>
+                            <th class="uk-width-small">Avmelding</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for connection in object_list %}
+                         {% if day == connection.reservation_interval.booking_interval.get_day_display %}
+                            <tr>
+                                <td>{{ connection.reservation_interval.start }} - {{ connection.reservation_interval.end }}</td>
+                                <td>{{ connection.reservation_interval.booking_interval.course.course_code }}</td>
+                                <td>{{ connection.reservation_interval.booking_interval.course }}</td>
+                                <td>{{ connection.assistant.get_full_name }}</td>
+                                <td>
+                                    <form method="POST">
+                                         {% csrf_token %}
+                                        <input type="number" hidden value="{{ connection.pk }}" id="reservation_connection_pk" name="reservation_connection_pk">
+                                        <input type="submit" value="Meld Av" class="uk-button uk-button-danger">
+                                    </form>
+                                </td>
+
+                            </tr>
+                         {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}

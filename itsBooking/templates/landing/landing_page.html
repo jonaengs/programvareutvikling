@@ -1,0 +1,111 @@
+{% extends 'itsBooking/base.html' %}
+{% load helpers %}
+
+{% block body %}
+
+    <div class="uk-container uk-container-medium">
+
+        <h2>{{ course.course_code }} - {{ course.title }}</h2>
+
+        {% include 'generic/display_messages.html' %}
+        {% include 'generic/display_form_errors.html' %}
+
+        <div class="uk-child-width-1-2@s" uk-grid>
+            {% if request.user|in_group:'students' %}
+                <div>
+                    <div class="uk-margin-medium uk-card uk-card-default uk-card-body">
+                        <h3 class="uk-card-title">Saltider -
+                            <a href="{% url 'course_detail' slug=course.slug %}">Reserver studass</a>
+                        </h3>
+                        {% include 'landing/landing_reservation_list.html' %}
+                    </div>
+                </div>
+                <div>
+                    <div class="uk-margin-medium uk-card uk-card-default uk-card-body">
+                        <h3 class="uk-card-title">Opplastinger -
+                            <a href="{% url 'upload_exercise' slug=course.slug %}">Last opp øving</a>
+                        </h3>
+                    </div>
+                    <div class="uk-margin-medium uk-card uk-card-default uk-card-body">
+                        <h3 class="uk-card-title">Opplastede innleveringer -
+                            <a href="{% url 'student_exercise_uploads_list' slug=course.slug %}">
+                                Se alle</a>
+                        </h3>
+                        {% include 'landing/landing_exercise_list.html' %}
+                    </div>
+                </div>
+
+            {% elif request.user|in_group:'course_coordinators' %}
+                <div>
+                    <div class="uk-margin-medium uk-card uk-card-default uk-card-body">
+                        <h3 class="uk-card-title">Oversikt -
+                            <a href="{% url 'course_detail' slug=course.slug %}">Sett saltider</a></h3>
+                        {% include 'landing/cc_overview.html' %}
+                    </div>
+                </div>
+                <div>
+                    <div class="uk-margin-medium uk-card uk-card-default uk-card-body">
+                        <h3 class="uk-card-title">Kunngjøringer -
+                            <a href="{% url 'announcements' slug=course.slug %}">Se kunngjøringer</a></h3>
+                        {% for announcement in announcements %}
+                        <h4 class="uk-comment-title uk-margin-remove">
+                            <a href="{% url 'announcement_detail' slug=announcement.course.slug pk=announcement.pk %}"
+                               class="uk-link-text">{{ announcement.title }}
+                            </a>
+                        </h4>
+                            <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove-top">
+                                <li>{{ announcement.timestamp }}</li>
+                                <li><a href="{% url 'announcement_detail' slug=announcement.course.slug pk=announcement.pk %}#comment-container">
+                                    {{ announcement.comments.count }} Kommentarer</a></li>
+                            </ul>
+                        {% endfor %}
+                        <br>
+                    </div>
+                    <div class="uk-margin-medium uk-card uk-card-default uk-card-body">
+                        <h3 class="uk-card-title">Opplastede innleveringer -
+                            <a href="{% url 'exercise_uploads_list' slug=course.slug %}">Se alle</a></h3>
+                        {% include 'landing/landing_exercise_list.html' %}
+
+                    </div>
+                </div>
+
+            {% elif request.user|in_group:'assistants' %}
+                <div>
+                    <div class="uk-margin-medium uk-card uk-card-default uk-card-body">
+                        <h3 class="uk-card-title">Saltider -
+                            <a href="{% url 'course_detail' slug=course.slug %}">Meld på saltider</a></h3>
+                        {% include 'landing/landing_assistant_reservation_list.html' %}
+
+                    </div>
+                </div>
+                <div>
+                    <div class="uk-margin-medium uk-card uk-card-default uk-card-body">
+                        <h3 class="uk-card-title">Kunngjøringer -
+                            <a href="{% url 'announcements' slug=course.slug %}">Se kunngjøringer</a></h3>
+                        {% for announcement in announcements %}
+                        <h4 class="uk-comment-title uk-margin-remove">
+                            <a href="{% url 'announcement_detail' slug=announcement.course.slug pk=announcement.pk %}" class="uk-link-text">
+                                {{ announcement.title }}
+                            </a>
+                        </h4>
+                            <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove-top">
+                                <li>{{ announcement.author.get_full_name }}</li>
+                                <li>{{ announcement.timestamp }}</li>
+                                <li><a href="{% url 'announcement_detail' slug=announcement.course.slug pk=announcement.pk %}#comment-container">
+                                    {{ announcement.comments.count }} Kommentarer</a></li>
+                            </ul>
+                        {% endfor %}
+                        <br>
+                    </div>
+                    <div class="uk-margin-medium uk-card uk-card-default uk-card-body">
+                        <h3 class="uk-card-title">Opplastede innleveringer -
+                            <a href="{% url 'exercise_uploads_list' slug=course.slug %}">Se alle</a></h3>
+                        {% include 'landing/landing_exercise_list.html' %}
+                    </div>
+                </div>
+
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

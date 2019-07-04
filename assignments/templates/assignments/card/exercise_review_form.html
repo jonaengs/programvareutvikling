@@ -1,0 +1,23 @@
+<form method="POST" style="display: none" id="{{ exercise.pk }}-form"
+      action="{% url 'exercise_uploads_list' slug=course.slug%}">
+    {% csrf_token %}
+    <fieldset class="uk-fieldset">
+
+        <input type="hidden" name="exercise_pk" value="{{ exercise.id }}">
+
+        <div class="uk-margin">
+            {{ form.feedback_text }}
+        </div>
+
+        <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+            {% for choice in form.approved %}
+                <div class="radio-container">
+                    {{ choice.choice_label }}
+                    {{ choice.tag }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <input type="submit" value="Send" class="uk-button uk-button-primary">
+    </fieldset>
+</form>

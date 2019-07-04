@@ -1,0 +1,13 @@
+{% load helpers %}
+
+<table class="uk-table uk-table-middle uk-table-divider">
+    {% for dict in booking_intervals %}
+
+        <tr>
+            <td>{{ dict.get_day_display|nob_day}}</td>
+            <td>{{ dict.start }} - {{ dict.end }}</td>
+            <td>Antall studenter: {{ dict|student_count}}</td>
+        </tr>
+
+    {% endfor %}
+</table>

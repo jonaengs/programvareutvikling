@@ -1,0 +1,25 @@
+{% extends 'itsBooking/base.html' %}
+
+{% block body %}
+    <div class="uk-container uk-container-small">
+        {% include 'communications/announcement_card.html' %}
+        <div class="uk-container" id="comment-container">
+            {% include 'communications/comment_list.html' %}
+        </div>
+        <br>
+        {% include 'communications/comment_form.html' %}
+        <br>
+    </div>
+
+    {% include 'communications/announcement_delete_modal.html' %}
+
+    <script>
+
+        function set_confirm_delete_modal_action(elem) {
+            let url = "{% url 'delete_announcement' pk=1 %}";
+            url = url.split('/').slice(0, -2).join('/') + '/' + elem.id + '/';
+            document.getElementById("confirm-delete-modal-form").setAttribute("action", url);
+        }
+
+    </script>
+{% endblock %}

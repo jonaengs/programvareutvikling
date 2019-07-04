@@ -1,0 +1,12 @@
+{% for message in messages %}
+    <div class="uk-margin uk-width-medium">
+        <div class="message uk-alert-{% if message.tags %}{{ message.tags }}
+                {% if message.tags == 'error' %}
+                    uk-alert-danger
+                {% endif %}
+            {% endif %}" uk-alert>
+            <a class="uk-alert-close" uk-close></a>
+            <p>{{ message }}</p>
+        </div>
+    </div>
+{% endfor %}

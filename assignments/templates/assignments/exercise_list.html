@@ -1,0 +1,40 @@
+{% extends 'itsBooking/base.html' %}
+{% load helpers %}
+
+{% block body %}
+
+<div class="uk-container uk-container-small">
+
+    {% if request.user|in_group:"students" %}
+        <h2>Dine opplastede øvinger - {{ course }}</h2>
+    {% else %}
+        <h2>Opplastinger - {{ course }}</h2>
+    {% endif %}
+
+    {% include 'generic/display_messages.html' %}
+    <div class="uk-child-width-1-1@l" uk-grid="masonry: true">
+        {% for exercise in exercise_list %}
+            <div>
+                {% include 'assignments/card/exercise_card.html' %}
+            </div>
+        {% empty %}
+            <h4>Det har ikke blitt lastet opp noen øvinger ennå</h4>
+        {% endfor %}
+    </div>
+    <br>
+</div>
+
+<script>
+
+    let url_params = location.hash;
+    url_params = url_params.split('#')[1].split('?');
+    let form = document.getElementById(url_params[0] + '-form');
+    let button = document.getElementById(url_params[0] + '-button');
+
+    if (url_params[1].split('=')[1] == 'true') {
+        show_review_form(button, form);
+    }
+
+</script>
+
+{% endblock %}

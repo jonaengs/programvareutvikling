@@ -1,0 +1,25 @@
+{% extends 'booking/reservation_table.html' %}
+{% load helpers %}
+
+{% block table_content %}
+    <div class="uk-inline">
+        <button class="uk-button uk-button-default" type="button">
+            <span id="{{ reservation.id }}">
+                {% if reservation.booking_interval.max_available_assistants == 0 %}
+                    Stengt
+                {% else %}
+                    {{ reservation.connections.count }}/{{ reservation.booking_interval.assistants.count }} reservert
+                {% endif %}
+            </span>
+        </button>
+        <div uk-dropdown="mode: click; boundary: .uk-switcher">
+            {% if reservation.connections.all %}
+                {% for reservation_connection in reservation.connections.all %}
+                    <p>{{ reservation_connection.student|name }} </p>
+                {% endfor %}
+            {% else %}
+                <p>Ingen påmeldte</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

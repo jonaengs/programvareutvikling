@@ -1,0 +1,21 @@
+{% extends 'booking/table_skeleton.html' %}
+
+{% block table_content %}
+    <div class="uk-inline">
+        <button class="uk-button uk-button-default" type="button">
+            <span id="{{ booking_interval.nk }}_available_assistants">
+                {{ booking_interval.assistants.all.count }}</span>
+            / {{ booking_interval.max_available_assistants }} påmeldte
+        </button>
+        <div uk-dropdown="mode: click; boundary: .uk-switcher">
+            {% if booking_interval.assistants.all %}
+                {% for assistant in booking_interval.assistants.all %}
+                    <p>{{ assistant.get_full_name }}<p/>
+                {% endfor %}
+            {% else %}
+                <p>Ingen påmeldte<p/>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

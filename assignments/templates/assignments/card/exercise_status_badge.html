@@ -1,0 +1,7 @@
+{% if exercise.approved %}
+    <div class="uk-card-badge uk-label uk-label-success">Godkjent</div>
+{% elif exercise.approved == False %}
+    <div class="uk-card-badge uk-label uk-label-danger">Underkjent</div>
+{% else %}
+    <div class="uk-card-badge uk-label">Ingen vurdering</div>
+{% endif %}

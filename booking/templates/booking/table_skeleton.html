@@ -1,0 +1,81 @@
+{% load helpers %}
+
+{% block body %}
+    <div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom uk-overflow-auto">
+        <table class="uk-table uk-table-striped uk-table-small uk-table-middle">
+            <thead>
+            <tr>
+                <th></th>
+                {% for day in weekdays %}
+                    <th>{{ day|nob_day }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for interval in intervals %}
+                <tr>
+                    <td>{{ interval.start }} - {{ interval.stop }}</td>
+                    {% for booking_interval in interval.booking_intervals %}
+                        <td>
+                            {% block table_content %}{% endblock %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        function update_min_assistants(element, id, num) {
+
+            if (num < element.min) {
+                element.value = 0;
+            }
+
+            $.ajax({
+                url: '{% url 'update_max_num_assistants' %}',
+                data: {
+                    'nk': id,
+                    'num': num,
+                },
+                dataType: 'json',
+            })
+
+        }
+
+        function bi_registration_switch(element, id) {
+
+            $.ajax({
+                url: '{% url 'bi_registration_switch' %}',
+                data: {
+                    'nk': id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.registration_available) {
+                        make_registration_available(id, data.available_assistants_count);
+                    } else {
+                        make_registration_unavailable(id, data.available_assistants_count);
+                    }
+                }
+            })
+
+        }
+
+        function make_registration_available(id, count) {
+            document.getElementById(id).setAttribute('value', 'Meld opp');
+            document.getElementById(id).setAttribute('class', 'uk-button uk-button-primary uk-button-small uk-width-1-1 uk-width-expand');
+            document.getElementById(id + "_available_assistants").innerHTML = count + "";
+        }
+
+        function make_registration_unavailable(id, count) {
+            document.getElementById(id).setAttribute('value', 'Meld av');
+            document.getElementById(id).setAttribute('class', 'uk-button uk-button-danger uk-button-small uk-width-1-1 uk-width-expand')
+            document.getElementById(id + "_available_assistants").innerHTML = count + "";
+        }
+
+    </script>
+
+{% endblock body %}

@@ -1,0 +1,18 @@
+.uk-button-primary{
+    background-color:#fb7922;
+}
+.uk-button-primary:focus,.uk-button-primary:hover{
+    background-color:#d8681e;
+}
+.uk-button-primary:active{
+    background-color:#fb7922;
+}
+.uk-card-primary{
+    background:#fb7922;
+}
+.uk-card-primary.uk-card-hover:hover{
+    background-color:#fb7922;
+}
+.uk-input:focus,.uk-select:focus,.uk-textarea:focus{
+    border-color: #fb7922;
+}

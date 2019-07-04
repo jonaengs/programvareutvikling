@@ -1,0 +1,101 @@
+{% load helpers %}
+
+{% block body %}
+
+<style>
+tr.reservation_row {display: none;}
+tr.booking_interval_row {
+    font-size: 1.15em;
+}
+tr.booking_interval_row:hover {
+    background-color: rgba(250, 250, 150, 0.3) !important;
+    cursor: pointer;}
+button.table_button {height: 30px;}
+</style>
+
+<div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
+    <table class="uk-table uk-table-striped uk-table-small uk-table-middle">
+        <thead>
+            <tr>
+                <th class="uk-width-small">Time</th>
+                {% for day in weekdays %}
+                    <th class="uk-text-center uk-width-small">{{ day|nob_day }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for interval in intervals %}
+                <tr onclick="reveal_reservations(this.id)" id="{{ interval.start }}" class="booking_interval_row">
+                    <td>{{ interval.start }} - {{ interval.stop }}</td>
+                    <td colspan="4" class="uk-text-center">
+                         VIS MER
+                    </td>
+                    <td></td>
+                </tr>
+                {% for reservation_interval in interval.reservation_intervals %}
+                    <tr class="reservation_row {{ interval.start }}">
+                        <td>
+                            {{ reservation_interval.start }} - {{ reservation_interval.stop }}
+                        </td>
+                        {% for reservation in reservation_interval.reservations %}
+                            <td>
+                                {% block table_content %}{% endblock table_content%}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+
+function fill_reservation_form(element) {
+    let data = element.id.split('-');
+    $('#id_reservation_pk')[0].value = data[0];
+
+    $('#modal_day')[0].innerText = data[1];
+    $('#modal_interval')[0].innerText = data[2] + " - " + data[3];
+}
+
+function reveal_reservations(id) {
+
+    // get row that was clicked on
+    let parent_row = document.getElementById(id);
+
+    // show every container row
+    let all_booking_interval_rows = document.getElementsByClassName("booking_interval_row");
+    for (let elt of all_booking_interval_rows) {
+        if (elt != parent_row) {
+            elt.childNodes[3].innerText = 'VIS MER';
+        } else {
+            console.log(elt)
+        }
+    }
+
+    // hide every reservation row
+    let all_reservation_rows = document.getElementsByClassName("reservation_row");
+    for (let elt of all_reservation_rows) {
+        elt.style.display = 'none';
+    }
+
+    // Show child (reservation) rows of row clicked, change parent row middle td text
+    if (parent_row.innerText.includes('VIS MER')) {
+
+        parent_row.childNodes[3].innerHTML = '<span uk-icon="arrow-up"></span>' +
+            ' VIS MINDRE ' +
+            '<span uk-icon="arrow-up"></span>';
+
+        let show_reservation_rows = document.getElementsByClassName("reservation_row " + id);
+        for (let elt of show_reservation_rows) {
+            elt.style.display = 'table-row';
+        }
+    } else {
+        parent_row.childNodes[3].innerText = 'VIS MER';
+    }
+}
+
+</script>
+
+{% endblock body %}

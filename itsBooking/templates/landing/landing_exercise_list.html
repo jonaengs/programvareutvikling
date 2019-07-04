@@ -1,0 +1,15 @@
+{% load helpers %}
+
+<table class="uk-table uk-table-middle uk-table-divider">
+    <tbody>
+
+        {% for exercise in exercise_list %}
+            <div>
+                {% include 'landing/landing_exercise_card.html' %}
+            </div>
+        {% empty %}
+            <h4>Alle opplastede øvinger er vurdert</h4>
+        {% endfor %}
+
+    </tbody>
+</table>

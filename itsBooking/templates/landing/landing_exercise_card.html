@@ -1,0 +1,33 @@
+{% load helpers %}
+
+<style>
+    button {
+        /* vertically align button with status badge */
+        position: relative;
+        right: 10px;
+    }
+</style>
+
+<a href="{% url 'exercise_uploads_list' slug=course.slug %}#{{ exercise.pk }}">
+<div class="uk-card uk-card-default uk-card-body uk-card-small">
+
+    {% include 'assignments/card/exercise_status_badge.html' %}
+    <h3 class="uk-card-title">
+        {% if request.user|in_group:"assistants" or request.user|in_group:"course_coordinators" %}
+            {{ exercise.student|name }}
+        {% endif %}
+    </h3>
+    <p>
+        <a href="{{ exercise.file.url }}">{{ exercise.filename }}</a>
+        {% if request.user|in_group:"assistants" or request.user|in_group:"course_coordinators" %}
+            {% if exercise.approved is None %}
+                <a class="uk-button-primary uk-button uk-float-right" id="{{ exercise.pk }}-form"
+                    href="{% url 'exercise_uploads_list' slug=course.slug %}#{{ exercise.pk }}?show_form=true">
+                    Gi tilbakemelding
+                </a>
+            {% endif %}
+        {% endif %}
+    </p>
+
+</div>
+</a>

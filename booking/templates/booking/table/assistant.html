@@ -1,0 +1,28 @@
+{% extends 'booking/table_skeleton.html' %}
+{% load helpers %}
+
+{% block table_content %}
+
+    <div class="uk-text-center">
+    <span id="{{ booking_interval.nk }}_available_assistants">
+        {{ booking_interval.assistants.all.count }}
+    </span>
+        / {{ booking_interval.max_available_assistants }} påmeldte
+    </div>
+    <input
+            type="button" name="add assistants" id="{{ booking_interval.nk }}"
+            onclick="bi_registration_switch(this, this.id);"
+            {% if request.user not in booking_interval.assistants.all %}
+                {% if booking_interval.max_available_assistants == 0 %}
+            disabled value="Stengt"
+                {% elif booking_interval.max_available_assistants <= booking_interval.assistants.all.count %}
+            disabled value="Fullt"
+                {% endif %}
+            class="uk-button uk-button-primary uk-button-small uk-width-1-1 uk-width-expand"
+            value="Meld opp"
+            {% else %}
+            value="Meld av"
+            class="uk-button uk-button-danger uk-button-small uk-width-1-1 uk-width-expand"
+            {% endif %}>
+
+{% endblock %}

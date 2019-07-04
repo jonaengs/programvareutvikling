@@ -1,0 +1,8 @@
+django==2.1.*
+faker
+coverage
+pillow
+requests
+eb
+awsebcli==3.14.*
+mysqlclient==1.4.*

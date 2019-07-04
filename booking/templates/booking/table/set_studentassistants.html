@@ -1,0 +1,11 @@
+{% extends 'booking/table_skeleton.html' %}
+{% load helpers %}
+
+{% block table_content %}
+    <input type="number" name="min num of assistants"
+           id="{{ booking_interval.nk }}" min="0" step="1"
+           value="{{ booking_interval.max_available_assistants }}"
+           class="uk-input uk-form-blank"
+           onchange="update_min_assistants(this, this.id, this.value);"
+           style="width: 60px;">
+{% endblock %}

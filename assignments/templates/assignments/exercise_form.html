@@ -1,0 +1,38 @@
+{% extends 'itsBooking/base.html' %}
+
+{% block body %}
+
+    <div class="uk-container uk-container-small">
+
+    {% include 'generic/display_form_errors.html' %}
+
+    <h2>Last opp innleveringer - {{ course.title }}</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="uk-form-stacked">
+        {% csrf_token %}
+        <div class="js-upload uk-placeholder uk-text-center">
+            <span uk-icon="icon: cloud-upload"></span>
+            <span class="uk-text-middle">Legg ved filer ved å dra og slippe dem her, eller</span>
+            <div class="js-upload" uk-form-custom>
+                {{ form.file }}
+                <button class="uk-button uk-button-default uk-button-small" type="button" tabindex="-1">
+                    klikk her</button> for å åpne filutforskeren din.
+            </div>
+            <br>
+            <span id="filename" class="uk-link"></span>
+        </div>
+
+        <input type="submit" value="Last opp" class="uk-button-primary uk-button-large">
+    </form>
+
+    </div>
+
+<script>
+
+function display_filename(e) {
+    document.getElementById('filename').innerText = e.files[0].name;
+}
+
+</script>
+
+{% endblock %}

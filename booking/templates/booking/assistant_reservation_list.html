@@ -1,0 +1,66 @@
+{% extends 'itsBooking/base.html' %}
+{% load helpers %}
+{% block body %}
+
+    <style>
+td {font-size: 16px;}
+    #header {width: 95%; margin-left: 2%;}
+</style>
+    <div class = "uk-container uk-container-medium">
+            <table class="uk-table uk-table-middle" id="header">
+                <thead>
+                <tr>
+                    <th class="uk-width-small">Emnekode</th>
+                    <th class="uk-width-medium">Emne</th>
+                    <th class="uk-width-small">Dag</th>
+                    <th class="uk-width-small">Tid</th>
+                    <th class="uk-width-small">Antall reservasjoner</th>
+                </tr>
+                </thead>
+             </table>
+    </div>
+    <div class = "uk-container uk-container-medium">
+        {% for dict in booking_intervals %}
+                <ul uk-accordion>
+                    <li>
+                        <a class="uk-accordion-title uk-card uk-card-default uk-card-body">
+                            <table class="uk-table uk-table-middle">
+                                <tr>
+                                    <td class="uk-width-small">{{ dict.booking_interval.course.course_code }}</td>
+                                    <td class="uk-width-medium">{{ dict.booking_interval.course }}</td>
+                                    <td class="uk-width-small">{{ dict.booking_interval.get_day_display|nob_day}}</td>
+                                    <td class="uk-width-small">{{ dict.booking_interval.start }} - {{ dict.booking_interval.end }}</td>
+                                    <td class="uk-width-small">{{ dict.booking_interval|student_count}}</td>
+                                </tr>
+                            </table>
+                        </a>
+                        <div class="uk-accordion-content uk-background-muted">
+                            <table class="uk-table uk-table-small uk-table-middle">
+                                <thead>
+                                    <tr>
+                                        <th class="uk-width-small uk-text-right">Kvartersintervall</th>
+                                        <th class="uk-width-small">Student</th>
+                                    </tr>
+                                </thead>
+                                {% for dict2 in dict.reservation_intervals %}
+                                    <tr>
+                                        <td class="uk-width-small uk-text-right">
+                                            {{ dict2.reservation_interval.start }} - {{ dict2.reservation_interval.end }}
+                                        </td>
+                                        <td class="uk-width-small uk-text-emphasis">
+                                            {% if dict2.connection %}
+                                                {{ dict2.connection.student|name }}
+                                            {% else %}
+                                                <em>Ingen</em>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </li>
+                </ul>
+        {% endfor %}
+    </div>
+{% endblock body %}
+<h3 class="uk-heading-bullet">{{ reservation  }}</h3>

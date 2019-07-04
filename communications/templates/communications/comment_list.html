@@ -1,0 +1,23 @@
+{% for comment in announcement.comments.all %}
+    <article class="uk-comment uk-comment-primary">
+        <header class="uk-comment-header uk-grid-medium uk-flex-middle" uk-grid>
+            <div class="uk-width-auto">
+                {% include 'generic/display_avatar_img.html' with user=comment.author %}
+            </div>
+            <div class="uk-width-expand">
+                <h4 class="uk-comment-title uk-margin-remove">{{ comment.author.get_full_name }}
+                    {% if comment.author == comment.announcement.course.course_coordinator %}
+                        <span uk-icon="icon: star" style="color: cornflowerblue"></span>
+                    {% endif %}
+                </h4>
+                <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove-top">
+                    <li>{{ comment.timestamp }}</li>
+                </ul>
+            </div>
+        </header>
+        <div class="uk-comment-body">
+            <p>{{ comment.content }}</p>
+        </div>
+    </article>
+    <hr style="margin: 5px">
+{% endfor %}
